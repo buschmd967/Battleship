@@ -9,7 +9,7 @@ int main(int argc, char** argv){
   sf::RenderWindow renderWindow(sf::VideoMode(WIDTH, HEIGHT), "Hello Cruel World");
   // Create a font object and load it from file relative
   sf::Font font;
-  if (!font.loadFromFile("fonts/Roboto/Roboto-Black.ttf")){
+  if (!font.loadFromFile("../../fonts/Roboto/Roboto-Black.ttf")){
     return 42; // Robust error handling!
   }
 
