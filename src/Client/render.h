@@ -2,6 +2,7 @@
 #include "button.h"
 #include <vector>
 
+//Handle window rendering and button presses
 class Render{
 public:
 	
@@ -14,12 +15,19 @@ public:
 	void render();
 	bool isOpen(){return _window.isOpen();}
 
+	int getButtonClicked();
+	bool mouseClicked(){return _mouseClicked;}
+	void setMouseClicked(bool mc){_mouseClicked = mc;}
+
 
 private:
 	void drawButtons();
 
 	float _height;
 	float _width;
+
+	sf::Vector2i _mousePos;
+	bool _mouseClicked = false;
 
 	std::vector<Button> _buttons;
 

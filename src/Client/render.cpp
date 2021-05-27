@@ -4,11 +4,6 @@
 #include "button.h"
 
 
-void Render::drawButtons(){
-	for(Button b : _buttons){
-		b.draw(_window);
-	}
-}
 
 void Render::render(){
 
@@ -17,8 +12,18 @@ void Render::render(){
 	while (_window.pollEvent(event))
 	{
 		// "close requested" event: we close the _window
-		if (event.type == sf::Event::Closed)
-			_window.close();
+		switch(event.type){
+			case sf::Event::Closed:
+				_window.close();
+				break;
+			case sf::Event::MouseButtonPressed:
+				_mouseClicked = true;
+				break;
+			case sf::Event::MouseButtonReleased:
+				_mouseClicked = false;
+				break;
+		}
+		_mousePos = sf::Mouse::getPosition(_window);
 	}
 
 	// clear the window with white color
@@ -32,4 +37,19 @@ void Render::render(){
 
 	// end the current frame
 	_window.display();
+}
+
+int Render::getButtonClicked(){
+	for(Button b : _buttons){
+		if(b.clicked(_mousePos.x, _mousePos.y)){
+			return b.id();
+		}
+	}
+	return -1;
+}
+
+void Render::drawButtons(){
+	for(Button b : _buttons){
+		b.draw(_window);
+	}
 }

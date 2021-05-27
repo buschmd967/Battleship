@@ -6,9 +6,10 @@
 #include <algorithm>
 
 Button::Button(int x, int y, int width, int height, int id): _x(x), _y(y), _width(width), _height(height), _id(id) {
-if(!_font.loadFromFile("../fonts/Roboto/Roboto-Black.ttf")){
-		std::cout << "Error loading default Roboto-Black font for button id '" << id << "', hopefully it doesn't require text!" << std::endl;
-	
+	if(!_font.loadFromFile("../fonts/Roboto/Roboto-Black.ttf")){
+		if(!_font.loadFromFile("../../fonts/Roboto/Roboto-Black.ttf")){
+			std::cout << "Error loading default Roboto-Black font for button id '" << id << "', hopefully it doesn't require text!" << std::endl;
+		}
 	}
 }
 /*
@@ -24,6 +25,12 @@ Button::Button(int x, int y, int width, int height, int id, const char text[]): 
 }
 
 */
+
+bool Button::clicked(float x, float y){
+
+	return (x >= _x && x <= _x + _width && y >= _y && y <= _y + _height );
+}
+
 void Button::draw(sf::RenderWindow & window){
 	//draw rectangle shape
 	sf::RectangleShape rect(sf::Vector2f(_width, _height));

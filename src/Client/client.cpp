@@ -30,9 +30,18 @@ void Client::run(){
 		if(_changeGameState){
 			updateGameState();
 		}
-
-
 		_r.render();
+
+		switch(_gameState){
+			case 0: // Menu
+				if(_r.mouseClicked()){
+					_r.setMouseClicked(false);
+					int pressedButton = _r.getButtonClicked();
+					std::cout << "Button Pressed: " << pressedButton << std::endl;
+				}
+				break;
+
+		}
 	}
 
 }
