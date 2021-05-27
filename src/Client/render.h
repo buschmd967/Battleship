@@ -11,13 +11,14 @@ public:
 
 	
 
-	void serRenderButtons(std::vector<Button> b){_buttons = b;}
+	void setRenderButtons(std::vector<Button> b){_buttons = b;}
 	void render();
 	bool isOpen(){return _window.isOpen();}
 
 	int getButtonClicked();
 	bool mouseClicked(){return _mouseClicked;}
 	void setMouseClicked(bool mc){_mouseClicked = mc;}
+	void quit(){_window.close();}
 
 
 private:
