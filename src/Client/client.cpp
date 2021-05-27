@@ -14,7 +14,7 @@ Client::Client(float width, float height): _r(width, height){
 	int i = 0;
 	for(int y = 0; y < 8; y++){
 		for(int x = 0; x < 8; x++){
-		_setupButtons.push_back(Button( (width/10.0) * (x+1) + 1, (height / 10.0) * (y+1), width/10.0 - 1, height/10.0 - 1, i));
+		_setupButtons.push_back(Button( (height/10.0) * (x+1) + 1, (height / 10.0) * (y+1), height/10.0 - 1, height/10.0 - 1, i));
 		i++;
 		}
 	}
@@ -42,7 +42,8 @@ void Client::run(){
 		if(_changeGameState){
 			updateGameState();
 		}
-		_r.render();
+		_r.handleEvents();
+		
 
 		switch(_gameState){
 			case 0: // Menu
@@ -80,7 +81,9 @@ void Client::run(){
 				}
 				break;
 
-		}
+		} //End Switch
+
+		_r.render();
 	}
 
 }

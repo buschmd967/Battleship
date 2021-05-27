@@ -3,16 +3,11 @@
 #include "render.h"
 #include "button.h"
 
-
-
-void Render::render(){
-
-	// check all the window's events that were triggered since the last iteration of the loop
-	sf::Event event;
-	while (_window.pollEvent(event))
+void Render::handleEvents(){
+	while (_window.pollEvent(_event))
 	{
 		// "close requested" event: we close the _window
-		switch(event.type){
+		switch(_event.type){
 			case sf::Event::Closed:
 				_window.close();
 				break;
@@ -25,6 +20,13 @@ void Render::render(){
 		}
 		_mousePos = sf::Mouse::getPosition(_window);
 	}
+}
+
+void Render::render(){
+
+	// check all the window's events that were triggered since the last iteration of the loop
+	
+
 
 	// clear the window with white color
 	_window.clear(sf::Color::White);

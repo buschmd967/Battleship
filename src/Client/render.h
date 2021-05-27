@@ -10,7 +10,7 @@ public:
 
 
 	
-
+	void handleEvents();
 	void setRenderButtons(std::vector<Button> b){_buttons = b;}
 	void render();
 	bool isOpen(){return _window.isOpen();}
@@ -23,6 +23,9 @@ public:
 
 private:
 	void drawButtons();
+	sf::Event _event;
+
+	void drawEdit();
 
 	float _height;
 	float _width;
