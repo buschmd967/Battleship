@@ -1,40 +1,45 @@
+#include <string>
 #include <iostream>
-#include "SFML/Graphics.hpp"
-
-#define WIDTH 1600
-#define HEIGHT 900
+#include <SFML/Graphics/Color.hpp>
+#include "client.h"
 
 
-int main(int argc, char** argv){
-  sf::RenderWindow renderWindow(sf::VideoMode(WIDTH, HEIGHT), "Hello Cruel World");
-  // Create a font object and load it from file relative
-  sf::Font font;
-  if (!font.loadFromFile("../../fonts/Roboto/Roboto-Black.ttf")){
-    return 42; // Robust error handling!
-  }
 
-  //Create Hello World text objecct using our font and size 128pt
-  sf::Text text("Hello World", font, 128);
-  //Set the text color to red 
-  text.setColor(sf::Color::Red);
-  //Get the text object's physical dimensions and use them to center the text to 
-  //our render window
-  //By default things are drawn relative to their top left corner and can be 
-  //changed by calling setOrigin()
-  sf::FloatRect bounds(text.getLocalBounds());
-  text.setPosition(renderWindow.getSize().x/2 - (bounds.left + bounds.width/2), 
-          renderWindow.getSize().y/2 - (bounds.top + bounds.height/2));
-  while (renderWindow.isOpen()){
-    sf::Event event;
-    while (renderWindow.pollEvent(event)){
-      if (event.type == sf::Event::EventType::Closed)
-      {
-        renderWindow.close();
-      }
-    } 
-    renderWindow.clear(sf::Color::White);
-    //Draw our text object to the window
-    renderWindow.draw(text);
-    renderWindow.display();
-  }
+Client::Client(float width, float height): _r(width, height){
+	//Create menu buttons
+	_menuButtons.push_back(Button(width/2.0 - 100, height / 3, 200, 70, 0, sf::Color::Black, ((std::string) "START").c_str(), sf::Color::White));
+	_menuButtons.push_back(Button(width/2.0 - 100,  height * 10/11, 200, 70, 1, sf::Color::Black, ((std::string) "QUIT").c_str(), sf::Color::White));
+
+}
+
+void Client::updateGameState(){
+
+	switch(_gameState){
+		case 0: //Menu
+			_r.serRenderButtons(_menuButtons);
+			break;
+		default:
+			std::cout << "Error changing gamestates: GameState '" << _gameState << "' not recognized" << std::endl;
+	}
+	
+}
+
+void Client::run(){
+
+	while(_r.isOpen()){
+		if(_changeGameState){
+			updateGameState();
+		}
+
+
+		_r.render();
+	}
+
+}
+
+int main(){
+
+	Client c(1600, 900);
+	c.run();
+	return 0;
 }
