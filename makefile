@@ -1,6 +1,6 @@
 SHELL = /bin/sh
 
-CLIENT_CPP = src/Client/client.cpp src/Client/render.cpp src/Client/button.cpp
+CLIENT_CPP = src/Client/ship.cpp src/Client/client.cpp src/Client/render.cpp src/Client/button.cpp
 CC = g++
 LIBS = -lglfw3 -lsfml-graphics -lsfml-window -lsfml-system
 CLIENT_OUT = -o bin/Client

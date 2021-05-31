@@ -1,5 +1,6 @@
 #include "render.h"
 #include "button.h"
+#include "ship.h"
 #include <vector>
 
 class Client{
@@ -22,8 +23,9 @@ private:
 
 	Render _r;
 
-	std::vector<Button> _menuButtons;
-	std::vector<Button> _setupButtons;
+
+	std::vector<Ship> _ships;
+	std::vector<Ship *> _shipGrid = std::vector<Ship *>(64, nullptr);
 
 
 };
@@ -33,4 +35,5 @@ inline int Client::changeGameState(int gs){
 	_gameState = gs;
 	_changeGameState = true;
 	return oldGameState;
+
 }

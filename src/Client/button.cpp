@@ -45,7 +45,7 @@ void Button::draw(sf::RenderWindow & window){
 		sf::Text text;
 		text.setFont(_font);
 		text.setString(_text);
-		int charSize = std::min(_height / 2, (int)( _width /  _text.size() * 1.3));
+		int charSize = std::min((int) _height / 2, (int) _width /  (int) (_text.size() * 1.3) );
 		text.setCharacterSize(charSize);
 		//text.setCharacterSize(std::min(_height, _width));
 		text.setFillColor(_textColor);

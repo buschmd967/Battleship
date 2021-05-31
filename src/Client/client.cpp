@@ -2,33 +2,36 @@
 #include <iostream>
 #include <SFML/Graphics/Color.hpp>
 #include "client.h"
+#include "ship.h"
 
 
 
 Client::Client(float width, float height): _r(width, height){
-	//Create menu buttons
-	_menuButtons.push_back(Button(width/2.0 - 100, height / 3, 200, 70, 0, sf::Color::Black, ((std::string) "START").c_str(), sf::Color::White));
-	_menuButtons.push_back(Button(width/2.0 - 100,  height * 10/11, 200, 70, 1, sf::Color::Black, ((std::string) "QUIT").c_str(), sf::Color::White));
 
-	//Create cell buttons
-	int i = 0;
-	for(int y = 0; y < 8; y++){
-		for(int x = 0; x < 8; x++){
-		_setupButtons.push_back(Button( (height/10.0) * (x+1) + 1, (height / 10.0) * (y+1), height/10.0 - 1, height/10.0 - 1, i));
-		i++;
-		}
-	}
+	//Create ships
+	_ships.push_back(Ship(1010, 105, 2));
+	_ships.push_back(Ship(1010, 205, 3));
+	_ships.push_back(Ship(1010, 305, 3));
+	_ships.push_back(Ship(1010, 405, 4));
+	_ships.push_back(Ship(1010, 505, 5));
+	//std::cout << "isVert:" << _ships[0].isVertical() << std::endl;
+
+
+	//save ships to render
+	_r.setShips(_ships);
+
 
 }
 
 void Client::updateGameState(){
 
+	_changeGameState = false;
 	switch(_gameState){
 		case 0: //Menu
-			_r.setRenderButtons(_menuButtons);
+			std::cout << "menu" << std::endl;
 			break;
 		case 1: // Setup
-			_r.setRenderButtons(_setupButtons);
+			std::cout << "setup" << std::endl;
 			break;
 		default:
 			std::cout << "Error changing gamestates: GameState '" << _gameState << "' not recognized" << std::endl;
@@ -66,6 +69,11 @@ void Client::run(){
 				if(_r.mouseClicked()){
 					_r.setMouseClicked(false);
 					int pressedButton = _r.getButtonClicked();
+					int shipPressed = _r.getShipClicked();
+					std::cout << "Ship Pressed: " << shipPressed << std::endl;;
+					if(shipPressed != -1){
+						_r.undock(shipPressed);
+					}
 					/*
 					switch(pressedButton){
 						case 0: //Start
@@ -83,7 +91,7 @@ void Client::run(){
 
 		} //End Switch
 
-		_r.render();
+		_r.render(_gameState);
 	}
 
 }

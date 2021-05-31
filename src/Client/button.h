@@ -16,6 +16,8 @@ public:
 	void setTextColor(sf::Color tc){ _textColor = tc;}
 	bool clicked(float x, float y);
 	int id(){return _id;}
+	int width() {return _width;}
+	int height() {return _height;}
 
 
 	
