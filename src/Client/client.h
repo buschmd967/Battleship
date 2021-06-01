@@ -26,6 +26,7 @@ private:
 
 	std::vector<Ship> _ships;
 	std::vector<Ship *> _shipGrid = std::vector<Ship *>(64, nullptr);
+	int _currentShip = -1;
 
 
 };

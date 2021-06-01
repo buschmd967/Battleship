@@ -17,16 +17,20 @@ public:
 
 	int getButtonClicked();
 	int getShipClicked();
-	bool mouseClicked(){return _mouseClicked;}
+	inline bool mouseClicked(){return _mouseClicked;}
+	inline bool mouseDown(){return _mouseDown;}
 	inline void setMouseClicked(bool mc){_mouseClicked = mc;}
 	void quit(){_window.close();}
 
 	inline void setShips(std::vector<Ship> & ships);
-	inline void undock(int index) {_ships[index]->docked(false); _dockedCount--;}
-	inline void dock(int index) {_ships[index]->docked(true); _dockedCount++;}
+	inline void undock(int index);
+	inline void dock(int index);
 	inline void drawRect(int x1, int y1, int x2, int y2, sf::Color c);
-	inline void drawShips();
+	void drawShips();
 	inline void updateDockedCount();
+	inline int mouseX(){return _mousePos.x;}
+	inline int mouseY(){return _mousePos.y;}
+	
 
 private:
 	void drawButtons();
@@ -38,7 +42,8 @@ private:
 	float _width;
 
 	sf::Vector2i _mousePos;
-	bool _mouseClicked = false;
+	bool _mouseClicked = false; //for button click detection
+	bool _mouseDown = false; //for more raw stuff
 
 	//std::vector<Button> _buttons;
 	std::vector<Button> * _currentButtons = nullptr;
@@ -76,32 +81,17 @@ inline void Render::drawRect(int x1, int y1, int x2, int y2, sf::Color c){
 	
 }
 
-
-
-inline void Render::drawShips(){
-	//DockShips
-	int startHeight = 105;
-	int startWidth = 1010;
-	int size = _dockedCount;
-	int offset = 0;
-
-	for(int i = 0; i < size; i++){
-		std::cout << "size : " << size << std::endl;
-		std::cout << "offset: " << offset << std::endl;
-		std::cout << "i: " << i << std::endl;
-		Ship s = *(_ships[i]);
-		if(s.docked()){
-			for(int block = 0; block < s.size(); block++){
-
-				drawRect(startWidth + block * _blockWidth, (startHeight + 100 * (i - offset)), startWidth + (block + 1) * _blockWidth - 1, (startHeight + 100 * (i - offset)) + _blockHeight, sf::Color::Black); 
-			}	
-		}
-		else{
-			offset++;
-			size++;
-
-		}
-
+inline void Render::undock(int index) {
+	if(_ships[index]->docked()){
+		_ships[index]->docked(false); 
+		_dockedCount--;
 	}
+	
 }
 
+inline void Render::dock(int index) {
+	if(!_ships[index]->docked()){
+		_ships[index]->docked(true); 
+		_dockedCount++;
+	}
+}

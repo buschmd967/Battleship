@@ -33,9 +33,11 @@ void Render::handleEvents(){
 				break;
 			case sf::Event::MouseButtonPressed:
 				_mouseClicked = true;
+				_mouseDown = true;
 				break;
 			case sf::Event::MouseButtonReleased:
 				_mouseClicked = false;
+				_mouseDown = false;
 				break;
 			default:
 				break;
@@ -45,7 +47,7 @@ void Render::handleEvents(){
 }
 
 void Render::render(int state){
-
+	//std::cout << "MousePressed: " << _mouseDown << std::endl;
 	// check all the window's events that were triggered since the last iteration of the loop
 	
 
@@ -90,14 +92,17 @@ int Render::getButtonClicked(){
 }
 
 int Render::getShipClicked(){
+	
 	int x = _mousePos.x;
 	int y = _mousePos.y;
+	std::cout << "_ships size: "  << _ships.size() << std::endl;
 	for(int i = 0; i < _ships.size(); i++){
 		Ship s = * (_ships[i]);
 		if(s.isVertical()){
 		}
 		else{
-			//std::cout << x << " >= " << (s.x() - 5) << " && " << x << " <= " << (s.x() + _blockWidth * s.size() + 5) << " && " << std::endl;
+			std::cout << "ship " << i << " size: " << s.size() << std::endl;
+			std::cout << x << " >= " << (s.x() - 5) << " && " << x << " <= " << (s.x() + _blockWidth * s.size() + 5) << " && " << std::endl;
 			if(x >= s.x() - 5 && x <= (s.x() + _blockWidth * s.size() + 5) && y >= s.y() - 5 && y <= (s.y() + _blockHeight + 5))
 				return i;
 		}
@@ -108,5 +113,56 @@ int Render::getShipClicked(){
 void Render::drawButtons(){
 	for(Button b : *_currentButtons){
 		b.draw(_window);
+	}
+}
+
+void Render::drawShips(){
+	
+	//dock starting values
+	int startHeight = 105;
+	int startWidth = 1010;
+
+	//size of docked ships and offset if undocked ship is encountered
+	int size = _ships.size();
+	int offset = 0;
+
+	//used to draw undocked ships
+	int x;
+	int y;
+
+	for(int i = 0; i < size; i++){
+		/*
+		std::cout << "size : " << size << std::endl;
+		std::cout << "offset: " << offset << std::endl;
+		std::cout << "i: " << i << std::endl;
+		*/
+		Ship s = *(_ships[i]);
+		if(s.docked()){		//Docked Ships
+			_ships[i]->setPos(startWidth, startHeight + 100 * (i - offset));
+			for(int block = 0; block < s.size(); block++){
+				
+
+				drawRect(startWidth + block * _blockWidth, (startHeight + 100 * (i - offset)), startWidth + (block + 1) * _blockWidth - 1, (startHeight + 100 * (i - offset)) + _blockHeight, sf::Color::Black); 
+			}	
+		}
+		else{				//Undocked Ships
+			//Fix problems for docked ships
+			offset++;
+
+			x = s.x();
+			y = s.y();
+			//draw undocked ship
+			if(s.isVertical()){ //Vertical Ship
+
+
+			}
+			else{ 				//Horizontal Ship
+				for(int block = 0; block < s.size(); block++){
+					drawRect(x + block + block * _blockWidth, y, x + block + (block + 1) * _blockWidth - 1, y + _blockHeight - 1, sf::Color::Black);
+				}
+			}
+			
+		}
+
 	}
 }

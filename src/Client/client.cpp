@@ -69,10 +69,11 @@ void Client::run(){
 				if(_r.mouseClicked()){
 					_r.setMouseClicked(false);
 					int pressedButton = _r.getButtonClicked();
-					int shipPressed = _r.getShipClicked();
-					std::cout << "Ship Pressed: " << shipPressed << std::endl;;
-					if(shipPressed != -1){
-						_r.undock(shipPressed);
+					_currentShip = _r.getShipClicked();
+					std::cout << "Ship Pressed: " << _currentShip << std::endl;;
+					if(_currentShip != -1){
+						_r.undock(_currentShip);
+						std::cout << "undocked ship " << _currentShip << std::endl;;
 					}
 					/*
 					switch(pressedButton){
@@ -86,6 +87,24 @@ void Client::run(){
 					}
 							*/
 					std::cout << "Button Pressed: " << pressedButton << std::endl;
+				}
+				if(_r.mouseDown()){
+					if(_currentShip != -1){
+						_ships[_currentShip].setPos(_r.mouseX(), _r.mouseY());
+						std::cout << "moved ship " << _currentShip << " to (" << _r.mouseX() << ", " << _r.mouseY() << ")" << std::endl;
+					}
+//90, 800
+				}
+				else{
+					if(_currentShip != -1){
+						int x = _ships[_currentShip].x();
+						int y = _ships[_currentShip].y();
+						if(x > 805 || y < 85 || y > 805 || x < 85){ //in order of liklihood for lazy eval
+							_r.dock(_currentShip);
+						}
+						_currentShip = -1;
+					}
+					
 				}
 				break;
 
