@@ -72,8 +72,16 @@ void Client::run(){
 					_currentShip = _r.getShipClicked();
 					std::cout << "Ship Pressed: " << _currentShip << std::endl;;
 					if(_currentShip != -1){
+						Ship s = _ships[_currentShip];
 						_r.undock(_currentShip);
+
+						_mouseXOffset = s.x() - _r.mouseX();
+						_mouseYOffset = s.y() - _r.mouseY();
+						std::cout << "Set offset to: ( " << _mouseXOffset << ", " << _mouseYOffset << std::endl;
 						std::cout << "undocked ship " << _currentShip << std::endl;;
+					}
+					else{
+						_mouseXOffset = _mouseYOffset = 0;
 					}
 					/*
 					switch(pressedButton){
@@ -90,8 +98,8 @@ void Client::run(){
 				}
 				if(_r.mouseDown()){
 					if(_currentShip != -1){
-						_ships[_currentShip].setPos(_r.mouseX(), _r.mouseY());
-						std::cout << "moved ship " << _currentShip << " to (" << _r.mouseX() << ", " << _r.mouseY() << ")" << std::endl;
+						_ships[_currentShip].setPos(_r.mouseX() + _mouseXOffset , _r.mouseY() + _mouseYOffset);
+						//std::cout << "moved ship " << _currentShip << " to (" << _r.mouseX() << ", " << _r.mouseY() << ")" << std::endl;
 					}
 //90, 800
 				}

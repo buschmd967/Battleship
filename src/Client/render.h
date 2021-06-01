@@ -59,6 +59,7 @@ private:
 	int _blockWidth;
 	int _blockHeight;
 	int _dockedCount;
+	int _dockOffset = 0;
 
 };
 

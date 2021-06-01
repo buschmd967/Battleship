@@ -62,8 +62,8 @@ void Render::render(int state){
 			_window.clear(sf::Color(128, 128, 128));
 			_currentButtons = &_setupButtons;
 			drawButtons();
-			drawRect(1000, 100, 1500, 100 + 100 * _dockedCount, sf::Color(160, 160, 160));
-			drawShips();
+			drawRect(1000, 100, 1500, 100 + 100 * (_dockedCount + _dockOffset), sf::Color(160, 160, 160));
+			drawShips(); 
 			break;
 		default:
 			break;
