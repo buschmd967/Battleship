@@ -1,8 +1,10 @@
 #include <string>
 #include <iostream>
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/Window/Keyboard.hpp>
 #include "client.h"
 #include "ship.h"
+#include <algorithm>
 
 
 
@@ -66,6 +68,31 @@ void Client::run(){
 				}
 				break;
 			case 1: // Setup
+				if(sf::Keyboard::isKeyPressed(sf::Keyboard::R) && !_rPressHandled){
+					std::cout << "Handling R press" << std::endl;
+					if(_currentShip != -1){
+						_ships[_currentShip].rotate();
+
+						//Logic: if x and y have same signs, flip x
+						//if x and y have different signs, flip y
+
+						if(_mouseXOffset * _mouseYOffset > 0){ //same signs
+							//_mouseXOffset *= -1;
+							std::swap(_mouseXOffset, _mouseYOffset);
+							
+						}
+						else{
+							//_mouseYOffset *= -1;
+							std::swap(_mouseXOffset, _mouseYOffset);
+						}
+
+					}
+					_rPressHandled = true;
+				}
+				else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+					std::cout << "resetting _rPressHandled" << std::endl;
+					_rPressHandled = false;
+				}
 				if(_r.mouseClicked()){
 					_r.setMouseClicked(false);
 					int pressedButton = _r.getButtonClicked();

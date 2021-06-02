@@ -14,6 +14,7 @@ public:
 
 	inline bool sunk(){return _sunk;}
 	inline bool isVertical(){return _isVertical;}
+	inline void rotate(){_isVertical = !_isVertical;}
 	inline int x(){return _x;}
 	inline int y(){return _y;}
 	inline int size(){return _size;}
@@ -42,3 +43,28 @@ private:
 };
 
 #endif
+
+/*
+->
+X			x: -
+	+		y: -
+
+|
+V
+	X		x:+
+			y:-
++
+
+<-
+
++			x:+
+			y:+
+	X
+
+^
+|
+
+	+		x:-
+			y:+
+X
+*/

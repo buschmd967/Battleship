@@ -30,7 +30,7 @@ private:
 	int _mouseXOffset = 0;
 	int _mouseYOffset = 0;
 
-
+	bool _rPressHandled = false;
 };
 
 inline int Client::changeGameState(int gs){

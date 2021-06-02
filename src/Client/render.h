@@ -1,4 +1,5 @@
 #include "SFML/Graphics.hpp"
+#include "SFML/Window/Keyboard.hpp"
 #include "button.h"
 #include "ship.h"
 #include <vector>
@@ -28,11 +29,12 @@ public:
 	inline void drawRect(int x1, int y1, int x2, int y2, sf::Color c);
 	void drawShips();
 	inline void updateDockedCount();
+	
 	inline int mouseX(){return _mousePos.x;}
 	inline int mouseY(){return _mousePos.y;}
+
 	void setSelectedShip(Ship & s){_selectedShip = &s;}
 	void clearSelectedShip(){_selectedShip = nullptr;}
-	
 
 private:
 	void drawButtons();

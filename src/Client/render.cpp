@@ -148,7 +148,7 @@ void Render::drawShips(){
 		*/
 		
 		if(isSelectedShip && _ships[i] == _selectedShip){
-			std::cout << "Skipping selected ship of size " << _ships[i]->size() << std::endl;
+			//std::cout << "Skipping selected ship of size " << _ships[i]->size() << std::endl;
 			continue;
 		}
 
@@ -196,7 +196,7 @@ void Render::drawShips(){
 
 		}
 		else{ 				//Horizontal Ship
-			std::cout << "drawing ship of size " << s.size() << std::endl;
+			//std::cout << "drawing ship of size " << s.size() << std::endl;
 			for(int block = 0; block < s.size(); block++){
 				drawRect(x + block + block * _blockWidth, y, x + block + (block + 1) * _blockWidth - 1, y + _blockHeight - 1, s.color());
 			}
