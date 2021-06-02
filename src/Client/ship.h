@@ -1,4 +1,5 @@
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
 
 
@@ -18,6 +19,8 @@ public:
 	inline int size(){return _size;}
 	inline int docked() {return _docked;}
 	inline void docked(bool b){_docked = b;}
+	inline sf::Color color(){return _color;}
+	inline void setColor(sf::Color c){_color = c;}
 
 	inline void setPos(int x, int y){_x = x; _y = y;}
 
@@ -30,6 +33,8 @@ private:
 
 	int _x;
 	int _y;
+
+	sf::Color _color = sf::Color::Black;
 
 	//Original x y positions in edit tray
 	int _xOrig;

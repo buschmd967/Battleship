@@ -74,13 +74,16 @@ void Client::run(){
 					if(_currentShip != -1){
 						Ship s = _ships[_currentShip];
 						_r.undock(_currentShip);
+						_ships[_currentShip].setColor(sf::Color(100, 100, 100));
+						_r.setSelectedShip(_ships[_currentShip]);
 
 						_mouseXOffset = s.x() - _r.mouseX();
 						_mouseYOffset = s.y() - _r.mouseY();
-						std::cout << "Set offset to: ( " << _mouseXOffset << ", " << _mouseYOffset << std::endl;
+						std::cout << "Set offset to: ( " << _mouseXOffset << ", " << _mouseYOffset << ")" << std::endl;
 						std::cout << "undocked ship " << _currentShip << std::endl;;
 					}
 					else{
+						_r.clearSelectedShip();
 						_mouseXOffset = _mouseYOffset = 0;
 					}
 					/*
@@ -109,7 +112,11 @@ void Client::run(){
 						int y = _ships[_currentShip].y();
 						if(x > 805 || y < 85 || y > 805 || x < 85){ //in order of liklihood for lazy eval
 							_r.dock(_currentShip);
+							
+							
 						}
+						_ships[_currentShip].setColor(sf::Color::Black);
+						_r.clearSelectedShip();
 						_currentShip = -1;
 					}
 					

@@ -15,7 +15,7 @@ public:
 	void render(int state);
 	bool isOpen(){return _window.isOpen();}
 
-	int getButtonClicked();
+	int getButtonClicked(int x = -1, int y = -1);
 	int getShipClicked();
 	inline bool mouseClicked(){return _mouseClicked;}
 	inline bool mouseDown(){return _mouseDown;}
@@ -30,6 +30,8 @@ public:
 	inline void updateDockedCount();
 	inline int mouseX(){return _mousePos.x;}
 	inline int mouseY(){return _mousePos.y;}
+	void setSelectedShip(Ship & s){_selectedShip = &s;}
+	void clearSelectedShip(){_selectedShip = nullptr;}
 	
 
 private:
@@ -55,6 +57,7 @@ private:
 
 	std::vector<Ship *> _ships = std::vector<Ship *>();
 	std::vector<Ship *> _dockShips = std::vector<Ship *>();
+	Ship * _selectedShip = nullptr;
 
 	int _blockWidth;
 	int _blockHeight;
