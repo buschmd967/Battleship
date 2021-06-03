@@ -73,9 +73,10 @@ void Client::run(){
 					if(_currentShip != -1){
 						_ships[_currentShip].rotate();
 
+						std::swap(_mouseXOffset, _mouseYOffset);
 						//Logic: if x and y have same signs, flip x
 						//if x and y have different signs, flip y
-
+						/*
 						if(_mouseXOffset * _mouseYOffset > 0){ //same signs
 							//_mouseXOffset *= -1;
 							std::swap(_mouseXOffset, _mouseYOffset);
@@ -84,20 +85,20 @@ void Client::run(){
 						else{
 							//_mouseYOffset *= -1;
 							std::swap(_mouseXOffset, _mouseYOffset);
-						}
+						}*/
 
 					}
 					_rPressHandled = true;
 				}
 				else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
-					std::cout << "resetting _rPressHandled" << std::endl;
+					//std::cout << "resetting _rPressHandled" << std::endl;
 					_rPressHandled = false;
 				}
 				if(_r.mouseClicked()){
 					_r.setMouseClicked(false);
 					int pressedButton = _r.getButtonClicked();
 					_currentShip = _r.getShipClicked();
-					std::cout << "Ship Pressed: " << _currentShip << std::endl;;
+					//std::cout << "Ship Pressed: " << _currentShip << std::endl;;
 					if(_currentShip != -1){
 						Ship s = _ships[_currentShip];
 						_r.undock(_currentShip);
@@ -106,8 +107,8 @@ void Client::run(){
 
 						_mouseXOffset = s.x() - _r.mouseX();
 						_mouseYOffset = s.y() - _r.mouseY();
-						std::cout << "Set offset to: ( " << _mouseXOffset << ", " << _mouseYOffset << ")" << std::endl;
-						std::cout << "undocked ship " << _currentShip << std::endl;;
+						//std::cout << "Set offset to: ( " << _mouseXOffset << ", " << _mouseYOffset << ")" << std::endl;
+						//std::cout << "undocked ship " << _currentShip << std::endl;;
 					}
 					else{
 						_r.clearSelectedShip();
@@ -124,7 +125,7 @@ void Client::run(){
 
 					}
 							*/
-					std::cout << "Button Pressed: " << pressedButton << std::endl;
+					//std::cout << "Button Pressed: " << pressedButton << std::endl;
 				}
 				if(_r.mouseDown()){
 					if(_currentShip != -1){
@@ -135,12 +136,24 @@ void Client::run(){
 				}
 				else{
 					if(_currentShip != -1){
-						int x = _ships[_currentShip].x();
-						int y = _ships[_currentShip].y();
+						//int x = _ships[_currentShip].x();
+						//int y = _ships[_currentShip].y();
+						int x = _r.mouseX();
+						int y = _r.mouseY();
 						if(x > 805 || y < 85 || y > 805 || x < 85){ //in order of liklihood for lazy eval
+						//if(x > 805 || y < 85 || y > 805){ //in order of liklihood for lazy eval
 							_r.dock(_currentShip);
 							
 							
+						}
+						else{ //try to place it
+							Ship s = _ships[_currentShip];
+							
+							//get starting button
+							int button = _r.getButtonClicked(s.x(), s.y(), 0, 1);
+							std::cout << button << std::endl;
+
+
 						}
 						_ships[_currentShip].setColor(sf::Color::Black);
 						_r.clearSelectedShip();

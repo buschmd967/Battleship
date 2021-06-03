@@ -1,5 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include "button.h"
 
 
 
@@ -22,6 +24,7 @@ public:
 	inline void docked(bool b){_docked = b;}
 	inline sf::Color color(){return _color;}
 	inline void setColor(sf::Color c){_color = c;}
+	inline void setVertical(bool v){_isVertical = v;}
 
 	inline void setPos(int x, int y){_x = x; _y = y;}
 
@@ -40,31 +43,8 @@ private:
 	//Original x y positions in edit tray
 	int _xOrig;
 	int _yOrig;
+
+	std::vector<Button  *> _buttons; 
 };
 
 #endif
-
-/*
-->
-X			x: -
-	+		y: -
-
-|
-V
-	X		x:+
-			y:-
-+
-
-<-
-
-+			x:+
-			y:+
-	X
-
-^
-|
-
-	+		x:-
-			y:+
-X
-*/

@@ -26,9 +26,8 @@ Button::Button(int x, int y, int width, int height, int id, const char text[]): 
 
 */
 
-bool Button::clicked(float x, float y){
-
-	return (x >= _x && x <= _x + _width && y >= _y && y <= _y + _height );
+bool Button::clicked(float x, float y, int lowerBias = 0, int upperBias = 0){
+	return (x >= _x - lowerBias && x <= _x + _width + upperBias && y >= _y - lowerBias && y <= _y + _height + upperBias );
 }
 
 void Button::draw(sf::RenderWindow & window){

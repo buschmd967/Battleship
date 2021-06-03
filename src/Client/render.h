@@ -16,7 +16,7 @@ public:
 	void render(int state);
 	bool isOpen(){return _window.isOpen();}
 
-	int getButtonClicked(int x = -1, int y = -1);
+	int getButtonClicked(int x = -1, int y = -1, int lowerBias = 0, int upperBias = 0);
 	int getShipClicked();
 	inline bool mouseClicked(){return _mouseClicked;}
 	inline bool mouseDown(){return _mouseDown;}
@@ -98,6 +98,7 @@ inline void Render::undock(int index) {
 inline void Render::dock(int index) {
 	if(!_ships[index]->docked()){
 		_ships[index]->docked(true); 
+		_ships[index]->setVertical(false);
 		_dockedCount++;
 	}
 }

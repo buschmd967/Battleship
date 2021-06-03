@@ -82,14 +82,14 @@ void Render::render(int state){
 	_window.display();
 }
 
-int Render::getButtonClicked(int x, int y){
+int Render::getButtonClicked(int x, int y, int lowerBias, int upperBias){
 	if(x == -1 && y == -1){
 		x = _mousePos.x;
 		y = _mousePos.y;
 	}
 
 	for(Button b : *_currentButtons){
-		if(b.clicked(x, y)){
+		if(b.clicked(x, y, lowerBias, upperBias)){
 			return b.id();
 		}
 	}

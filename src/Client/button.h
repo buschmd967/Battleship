@@ -14,7 +14,7 @@ public:
 	void draw(sf::RenderWindow & window);
 	void setColor(sf::Color c){ _color = c;}
 	void setTextColor(sf::Color tc){ _textColor = tc;}
-	bool clicked(float x, float y);
+	bool clicked(float x, float y, int lowerBias, int upperBias);
 	int id(){return _id;}
 	int width() {return _width;}
 	int height() {return _height;}
