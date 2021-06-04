@@ -220,8 +220,9 @@ void Render::drawShips(){
 			if(s.isVertical()){ //Vertical Ship
 				for(int block = 0; block < s.size(); block++){
 					//drawRect(x, y + block + block * _blockHeight, x + _blockHeight - 1, y + block + (block + 1) * _blockHeight - 1, s.color());
-					drawRect(x, y, x + (_blockWidth+2), y + (_blockHeight+2) * s.size(), sf::Color::Blue);
-					drawRect(x + SHIP_HIGHLIGHT_WIDTH, y + SHIP_HIGHLIGHT_WIDTH, x + _blockWidth - SHIP_HIGHLIGHT_WIDTH, y + _blockHeight * s.size() - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
+					//drawRect(x, y, x + (_blockWidth), y + (_blockHeight) * s.size(), sf::Color::Blue);
+					drawRect(x, y, x + (_blockWidth), y + (_blockHeight+1) * s.size() - 1, sf::Color::Blue);
+					drawRect(x + SHIP_HIGHLIGHT_WIDTH, y + SHIP_HIGHLIGHT_WIDTH, x + _blockWidth - SHIP_HIGHLIGHT_WIDTH, y + (_blockHeight+1) * s.size() - 1 - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
 
 				}
 
@@ -229,8 +230,8 @@ void Render::drawShips(){
 			else{ 				//Horizontal Ship
 				for(int block = 0; block < s.size(); block++){
 					//drawRect(x + block + block * _blockWidth, y, x + block + (block + 1) * _blockWidth - 1, y + _blockHeight - 1, s.color());
-					drawRect(x, y, x + _blockWidth * s.size(), y + _blockHeight, sf::Color::Blue);
-					drawRect(x + SHIP_HIGHLIGHT_WIDTH, y + SHIP_HIGHLIGHT_WIDTH, x + _blockWidth * s.size() - SHIP_HIGHLIGHT_WIDTH, y + _blockHeight - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
+					drawRect(x, y, x + (_blockWidth+1) * s.size()-1, y + _blockHeight, sf::Color::Blue);
+					drawRect(x + SHIP_HIGHLIGHT_WIDTH, y + SHIP_HIGHLIGHT_WIDTH, x + (_blockWidth+1) * s.size() - 1 - SHIP_HIGHLIGHT_WIDTH, y + _blockHeight - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
 
 				}
 			}
@@ -250,7 +251,7 @@ void Render::drawShips(){
 		y = s.y();
 		if(s.isVertical()){ //Vertical Ship
 			for(int block = 0; block < s.size(); block++){
-				drawRect(x, y, x + (_blockWidth+2), y + (_blockHeight+2) * s.size(), sf::Color::Red);
+				drawRect(x, y, x + _blockWidth, y + _blockHeight * s.size(), sf::Color::Red);
 				drawRect(x + SHIP_HIGHLIGHT_WIDTH, y + SHIP_HIGHLIGHT_WIDTH, x + _blockWidth - SHIP_HIGHLIGHT_WIDTH, y + _blockHeight * s.size() - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
 			}
 

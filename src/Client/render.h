@@ -63,8 +63,8 @@ private:
 	std::vector<Ship *> _dockShips = std::vector<Ship *>();
 	Ship * _selectedShip = nullptr;
 
-	int _blockWidth;
-	int _blockHeight;
+	float _blockWidth;
+	float _blockHeight;
 	int _dockedCount;
 	int _dockOffset = 0;
 
