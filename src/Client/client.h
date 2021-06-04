@@ -14,6 +14,10 @@ public:
 
 private:
 
+	void handleShipEdit();
+	bool shipPlacementAvailable(int startIndex, int stopIndex, bool isVertical);
+
+
 	bool _changeGameState = true; // need to update game state
 	int _gameState = 0;
 	//Game States:
@@ -22,6 +26,8 @@ private:
 	
 
 	Render _r;
+	float _width;
+	float _height;
 
 
 	std::vector<Ship> _ships;

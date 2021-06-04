@@ -18,6 +18,8 @@ public:
 	int id(){return _id;}
 	int width() {return _width;}
 	int height() {return _height;}
+	inline int getX() {return _x;}
+	inline int getY() {return _y;}
 
 
 	

@@ -36,6 +36,8 @@ public:
 	void setSelectedShip(Ship & s){_selectedShip = &s;}
 	void clearSelectedShip(){_selectedShip = nullptr;}
 
+	inline std::vector<Button> * getCurrentButtons(){return _currentButtons;}
+
 private:
 	void drawButtons();
 	sf::Event _event;

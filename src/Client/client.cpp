@@ -8,7 +8,7 @@
 
 
 
-Client::Client(float width, float height): _r(width, height){
+Client::Client(float width, float height): _r(width, height), _width(width), _height(height){
 
 	//Create ships
 	_ships.push_back(Ship(1010, 105, 2));
@@ -22,6 +22,70 @@ Client::Client(float width, float height): _r(width, height){
 	//save ships to render
 	_r.setShips(_ships);
 
+
+}
+
+bool Client::shipPlacementAvailable(int startIndex, int stopIndex, bool isVertical){
+	int offset;
+	if(isVertical){
+		offset = 8;
+	}
+	else{
+		offset = 1;
+	}
+
+	for(int i = startIndex; i < stopIndex; i+=offset){
+		if(_shipGrid[i] != nullptr){
+			return false;
+		}
+
+	}
+	return true;
+
+}
+
+void Client::handleShipEdit(){
+	//int x = _ships[_currentShip].x();
+	//int y = _ships[_currentShip].y();
+	int x = _r.mouseX();
+	int y = _r.mouseY();
+	if(x > 805 || y < 85 || y > 805 || x < 85){ //in order of liklihood for lazy eval
+	//if(x > 805 || y < 85 || y > 805){ //in order of liklihood for lazy eval
+		_r.dock(_currentShip);
+		
+		
+	}
+	else{ //try to place it
+		Ship s = _ships[_currentShip];
+		
+		//get starting button
+		int startButton = _r.getButtonClicked(s.x() + _height/20.0, s.y() + _height/20.0, 0, 1);
+		int endButton;
+		if(s.isVertical()){
+			endButton = _r.getButtonClicked(s.x() + _height/20.0, s.y() + (_height/10.0 * (s.size() - 1)) + _height/20.0);
+		}
+		else{
+			endButton = _r.getButtonClicked(s.x() + (_height/10.0 * (s.size() - 1)) +_height/20.0, s.y() + _height/20.0);
+		}
+
+		std::cout << startButton << std::endl;
+		std::cout << endButton << std::endl;
+		if(endButton >= 0 && startButton >= 0){
+			std::vector<Button> buttons = * (_r.getCurrentButtons());
+			Button b = buttons[startButton];
+			//test if button 
+			if(shipPlacementAvailable(startButton, endButton, s.isVertical())){
+
+				_ships[_currentShip].setPos(b.getX(), b.getY());
+			}
+		}
+
+
+
+	}
+	_ships[_currentShip].setColor(sf::Color::Black);
+	_r.clearSelectedShip();
+	_currentShip = -1;
 
 }
 
@@ -136,28 +200,7 @@ void Client::run(){
 				}
 				else{
 					if(_currentShip != -1){
-						//int x = _ships[_currentShip].x();
-						//int y = _ships[_currentShip].y();
-						int x = _r.mouseX();
-						int y = _r.mouseY();
-						if(x > 805 || y < 85 || y > 805 || x < 85){ //in order of liklihood for lazy eval
-						//if(x > 805 || y < 85 || y > 805){ //in order of liklihood for lazy eval
-							_r.dock(_currentShip);
-							
-							
-						}
-						else{ //try to place it
-							Ship s = _ships[_currentShip];
-							
-							//get starting button
-							int button = _r.getButtonClicked(s.x(), s.y(), 0, 1);
-							std::cout << button << std::endl;
-
-
-						}
-						_ships[_currentShip].setColor(sf::Color::Black);
-						_r.clearSelectedShip();
-						_currentShip = -1;
+						handleShipEdit();
 					}
 					
 				}
