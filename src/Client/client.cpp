@@ -34,7 +34,7 @@ bool Client::shipPlacementAvailable(int startIndex, int stopIndex, bool isVertic
 		offset = 1;
 	}
 
-	for(int i = startIndex; i < stopIndex; i+=offset){
+	for(int i = startIndex; i <= stopIndex; i+=offset){
 		if(_shipGrid[i] != nullptr){
 			return false;
 		}
@@ -75,8 +75,20 @@ void Client::handleShipEdit(){
 			Button b = buttons[startButton];
 			//test if button 
 			if(shipPlacementAvailable(startButton, endButton, s.isVertical())){
-
+				int offset;
+				if(s.isVertical()){
+					offset = 8;
+				}
+				else{
+					offset = 1;
+				}
+				for(int i = startButton; i <= endButton; i += offset){
+					_shipGrid[i] = & _ships[_currentShip];
+					//FIX THIS LINE, WRITTEN AT 4:51 AM AND IS AWFUL
+					_ships[_currentShip].addButton(& (_r.getCurrentButtons()->operator[](i)));
+				}
 				_ships[_currentShip].setPos(b.getX(), b.getY());
+				_ships[_currentShip].setFloating(false);
 			}
 		}
 
@@ -132,7 +144,7 @@ void Client::run(){
 				}
 				break;
 			case 1: // Setup
-				if(sf::Keyboard::isKeyPressed(sf::Keyboard::R) && !_rPressHandled){
+				if( (sf::Keyboard::isKeyPressed(sf::Keyboard::R) || sf::Mouse::isButtonPressed(sf::Mouse::Right))  && !_rPressHandled){
 					std::cout << "Handling R press" << std::endl;
 					if(_currentShip != -1){
 						_ships[_currentShip].rotate();
@@ -154,17 +166,34 @@ void Client::run(){
 					}
 					_rPressHandled = true;
 				}
-				else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+				else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::R) && !sf::Mouse::isButtonPressed(sf::Mouse::Right)){
 					//std::cout << "resetting _rPressHandled" << std::endl;
 					_rPressHandled = false;
 				}
+
+
 				if(_r.mouseClicked()){
 					_r.setMouseClicked(false);
 					int pressedButton = _r.getButtonClicked();
 					_currentShip = _r.getShipClicked();
 					//std::cout << "Ship Pressed: " << _currentShip << std::endl;;
 					if(_currentShip != -1){
+						_ships[_currentShip].setFloating(true);
 						Ship s = _ships[_currentShip];
+						std::vector<Button *> shipButtons = _ships[_currentShip].getButtons();
+						std::cout << "size: " << shipButtons.size() << std::endl;
+						if(shipButtons.size() > 0){
+							std::cout << "button id: " << (_ships[_currentShip].getButtons()[0])->id() << std::endl;
+						}
+						
+						for(int i = 0; i < shipButtons.size(); i++){
+							
+							int id = shipButtons[i]->id();
+							std::cout << "id: " << id << std::endl;
+							_shipGrid[id] = nullptr;
+						}
+						_ships[_currentShip].clearButtons();
+
 						_r.undock(_currentShip);
 						_ships[_currentShip].setColor(sf::Color(100, 100, 100));
 						_r.setSelectedShip(_ships[_currentShip]);

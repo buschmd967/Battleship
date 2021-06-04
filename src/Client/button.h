@@ -22,7 +22,7 @@ public:
 	inline int getY() {return _y;}
 
 
-	
+	int _id;
 
 private:
 	int _x;
@@ -30,7 +30,7 @@ private:
 	int _width;
 	int _height;
 
-	int _id;
+
 	
 	std::string _text;
 

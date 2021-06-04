@@ -3,6 +3,8 @@
 #include "render.h"
 #include "button.h"
 
+#define SHIP_HIGHLIGHT_WIDTH 3
+
 Render::Render(float width, float height): _height(height), _width(width), _window(sf::VideoMode(width, height), "Battleship") {
 
 	//Create menu buttons
@@ -32,12 +34,29 @@ void Render::handleEvents(){
 				_window.close();
 				break;
 			case sf::Event::MouseButtonPressed:
-				_mouseClicked = true;
-				_mouseDown = true;
+				switch(_event.key.code){
+					case sf::Mouse::Left:
+						std::cout << _event.MouseLeft << std::endl;
+						_mouseClicked = true;
+						_mouseDown = true;
+						break;
+
+					case sf::Mouse::Right:
+						break;
+				}
+				
 				break;
 			case sf::Event::MouseButtonReleased:
-				_mouseClicked = false;
-				_mouseDown = false;
+				switch(_event.key.code){
+					case sf::Mouse::Left:
+						_mouseClicked = false;
+						_mouseDown = false;
+						break;
+
+					case sf::Mouse::Right:
+						break;	
+				}
+				
 				break;
 			default:
 				break;
@@ -101,9 +120,13 @@ int Render::getShipClicked(){
 	int x = _mousePos.x;
 	int y = _mousePos.y;
 
-	//std::cout << "_ships size: "  << _ships.size() << std::endl;
-	for(int i = 0; i < _ships.size(); i++){
-		
+	std::vector<int> backgroundShipsIndexes;
+
+	for(int i = _ships.size() - 1; i >= 0; i--){ // check floating ships first
+		if(!_ships[i]->isFloating()){
+			backgroundShipsIndexes.push_back(i);
+			continue;
+		}
 		Ship s = * (_ships[i]);
 		if(s.isVertical()){
 			if(x >= s.x() - 5 && x <= (s.x() + _blockWidth + 5) && y >= s.y() - 5 && y <= (s.y() + _blockHeight * s.size() + 5))
@@ -114,6 +137,20 @@ int Render::getShipClicked(){
 			//std::cout << x << " >= " << (s.x() - 5) << " && " << x << " <= " << (s.x() + _blockWidth * s.size() + 5) << " && " << std::endl;
 			if(x >= s.x() - 5 && x <= (s.x() + _blockWidth * s.size() + 5) && y >= s.y() - 5 && y <= (s.y() + _blockHeight + 5))
 				return i;
+		}
+	}
+
+	for(int index : backgroundShipsIndexes){
+		Ship s = * (_ships[index]);
+		if(s.isVertical()){
+			if(x >= s.x() - 5 && x <= (s.x() + _blockWidth + 5) && y >= s.y() - 5 && y <= (s.y() + _blockHeight * s.size() + 5))
+				return index;
+		}
+		else{
+			//std::cout << "ship " << i << " size: " << s.size() << std::endl;
+			//std::cout << x << " >= " << (s.x() - 5) << " && " << x << " <= " << (s.x() + _blockWidth * s.size() + 5) << " && " << std::endl;
+			if(x >= s.x() - 5 && x <= (s.x() + _blockWidth * s.size() + 5) && y >= s.y() - 5 && y <= (s.y() + _blockHeight + 5))
+				return index;
 		}
 	}
 	return -1;
@@ -138,7 +175,9 @@ void Render::drawShips(){
 	//used to draw undocked ships
 	int x;
 	int y;
-	bool isSelectedShip = _selectedShip != nullptr;
+
+	std::vector<int> floatingShipIndexes;
+	int selectedShipIndex = -1;
 
 	for(int i = 0; i < size; i++){
 		/*
@@ -147,19 +186,29 @@ void Render::drawShips(){
 		std::cout << "i: " << i << std::endl;
 		*/
 		
-		if(isSelectedShip && _ships[i] == _selectedShip){
+		if(_ships[i]->isFloating()){
 			//std::cout << "Skipping selected ship of size " << _ships[i]->size() << std::endl;
+			if(_ships[i] != _selectedShip){
+				floatingShipIndexes.push_back(i);
+			}
+			else{	//Save for later so current selected ship is displayed above all others
+				selectedShipIndex = i;
+			}
+			
 			continue;
 		}
 
 		Ship s = *(_ships[i]);
 		if(s.docked()){		//Docked Ships
 			_ships[i]->setPos(startWidth, startHeight + 100 * (i - offset));
+			/*
 			for(int block = 0; block < s.size(); block++){
 				
 
 				drawRect(startWidth + block * _blockWidth, (startHeight + 100 * (i - offset)), startWidth + (block + 1) * _blockWidth - 1, (startHeight + 100 * (i - offset)) + _blockHeight, sf::Color::Black); 
-			}	
+			}	*/
+			drawRect(startWidth, startHeight + 100 * (i - offset), startWidth + ((_blockWidth+2) * s.size()), startHeight+ + 100 * (i - offset) + (_blockHeight+2), sf::Color::Blue);
+			drawRect(startWidth + SHIP_HIGHLIGHT_WIDTH, startHeight + 100 * (i - offset) + SHIP_HIGHLIGHT_WIDTH, startWidth + ((_blockWidth+2) * s.size()) - SHIP_HIGHLIGHT_WIDTH, startHeight + 100 * (i - offset) + (_blockHeight+2) - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
 		}
 		else{				//Undocked Ships
 			//Fix problems for docked ships
@@ -170,13 +219,19 @@ void Render::drawShips(){
 			//draw undocked ship
 			if(s.isVertical()){ //Vertical Ship
 				for(int block = 0; block < s.size(); block++){
-					drawRect(x, y + block + block * _blockHeight, x + _blockHeight - 1, y + block + (block + 1) * _blockHeight - 1, s.color());
+					//drawRect(x, y + block + block * _blockHeight, x + _blockHeight - 1, y + block + (block + 1) * _blockHeight - 1, s.color());
+					drawRect(x, y, x + (_blockWidth+2), y + (_blockHeight+2) * s.size(), sf::Color::Blue);
+					drawRect(x + SHIP_HIGHLIGHT_WIDTH, y + SHIP_HIGHLIGHT_WIDTH, x + _blockWidth - SHIP_HIGHLIGHT_WIDTH, y + _blockHeight * s.size() - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
+
 				}
 
 			}
 			else{ 				//Horizontal Ship
 				for(int block = 0; block < s.size(); block++){
-					drawRect(x + block + block * _blockWidth, y, x + block + (block + 1) * _blockWidth - 1, y + _blockHeight - 1, s.color());
+					//drawRect(x + block + block * _blockWidth, y, x + block + (block + 1) * _blockWidth - 1, y + _blockHeight - 1, s.color());
+					drawRect(x, y, x + _blockWidth * s.size(), y + _blockHeight, sf::Color::Blue);
+					drawRect(x + SHIP_HIGHLIGHT_WIDTH, y + SHIP_HIGHLIGHT_WIDTH, x + _blockWidth * s.size() - SHIP_HIGHLIGHT_WIDTH, y + _blockHeight - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
+
 				}
 			}
 			
@@ -184,22 +239,29 @@ void Render::drawShips(){
 
 	}
 
+	if(selectedShipIndex != -1){
+		floatingShipIndexes.push_back(selectedShipIndex);
+	}
 	//Draw currently selected ship over all other ships (draw last)
-	if(isSelectedShip){
-		Ship s = *_selectedShip;
+	for(int index : floatingShipIndexes){
+
+		Ship s = * _ships[index];
 		x = s.x();
 		y = s.y();
 		if(s.isVertical()){ //Vertical Ship
 			for(int block = 0; block < s.size(); block++){
-				drawRect(x, y + block + block * _blockHeight, x + _blockHeight - 1, y + block + (block + 1) * _blockHeight - 1, s.color());
+				drawRect(x, y, x + (_blockWidth+2), y + (_blockHeight+2) * s.size(), sf::Color::Red);
+				drawRect(x + SHIP_HIGHLIGHT_WIDTH, y + SHIP_HIGHLIGHT_WIDTH, x + _blockWidth - SHIP_HIGHLIGHT_WIDTH, y + _blockHeight * s.size() - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
 			}
 
 		}
 		else{ 				//Horizontal Ship
 			//std::cout << "drawing ship of size " << s.size() << std::endl;
 			for(int block = 0; block < s.size(); block++){
-				drawRect(x + block + block * _blockWidth, y, x + block + (block + 1) * _blockWidth - 1, y + _blockHeight - 1, s.color());
+				drawRect(x, y, x + _blockWidth * s.size(), y + _blockHeight, sf::Color::Red);
+				drawRect(x + SHIP_HIGHLIGHT_WIDTH, y + SHIP_HIGHLIGHT_WIDTH, x + _blockWidth * s.size() - SHIP_HIGHLIGHT_WIDTH, y + _blockHeight - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
 			}
 		}
 	}
+		
 }

@@ -92,6 +92,7 @@ inline void Render::drawRect(int x1, int y1, int x2, int y2, sf::Color c){
 inline void Render::undock(int index) {
 	if(_ships[index]->docked()){
 		_ships[index]->docked(false); 
+		_ships[index]->setFloating(true);
 		_dockedCount--;
 	}
 	
@@ -101,6 +102,7 @@ inline void Render::dock(int index) {
 	if(!_ships[index]->docked()){
 		_ships[index]->docked(true); 
 		_ships[index]->setVertical(false);
+		_ships[index]->setFloating(false);
 		_dockedCount++;
 	}
 }

@@ -12,7 +12,7 @@
 
 class Ship{
 public:
-	Ship(int x, int y, int size): _x(x), _y(y), _size(size), _isVertical(false), _sunk(false), _xOrig(x), _yOrig(y), _docked(true){}
+	Ship(int x, int y, int size): _x(x), _y(y), _size(size), _isVertical(false), _sunk(false), _xOrig(x), _yOrig(y), _docked(true), _floating(false){}
 
 	inline bool sunk(){return _sunk;}
 	inline bool isVertical(){return _isVertical;}
@@ -27,10 +27,17 @@ public:
 	inline void setVertical(bool v){_isVertical = v;}
 
 	inline void setPos(int x, int y){_x = x; _y = y;}
+	inline void addButton(Button * b){_buttons.push_back(b);}
+	inline void clearButtons(){_buttons.clear();}
+	const std::vector<Button *> & getButtons(){return _buttons;}
+	bool isFloating(){return _floating;}
+	bool setFloating(bool f){_floating = f;}
 
 
 private:
 	bool _docked;
+	bool _floating;
+
 	int _size;
 	bool _isVertical;
 	bool _sunk;
