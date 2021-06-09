@@ -56,8 +56,12 @@ private:
 
 	sf::RenderWindow _window;
 	
+	//State 0
 	std::vector<Button> _menuButtons;
+	//State 1
 	std::vector<Button> _setupButtons;
+	//State 2
+	std::vector<Button> _setupButtonsConnect;
 
 	std::vector<Ship *> _ships = std::vector<Ship *>();
 	std::vector<Ship *> _dockShips = std::vector<Ship *>();

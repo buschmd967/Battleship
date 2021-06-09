@@ -111,6 +111,8 @@ void Client::updateGameState(){
 		case 1: // Setup
 			std::cout << "setup" << std::endl;
 			break;
+		case 2: //Setup + connect
+			std::cout << "setup + connect" << std::endl;
 		default:
 			std::cout << "Error changing gamestates: GameState '" << _gameState << "' not recognized" << std::endl;
 	}
@@ -144,6 +146,7 @@ void Client::run(){
 				}
 				break;
 			case 1: // Setup
+			case 2: //Setup + connect
 				if( (sf::Keyboard::isKeyPressed(sf::Keyboard::R) || sf::Mouse::isButtonPressed(sf::Mouse::Right))  && !_rPressHandled){
 					std::cout << "Handling R press" << std::endl;
 					if(_currentShip != -1){
@@ -233,6 +236,23 @@ void Client::run(){
 					}
 					
 				}
+
+				bool connect = true;
+
+				for(Ship s : _ships){
+					if(s.docked() || s.isFloating()){
+						connect = false;
+						break;
+					}
+				}
+
+				if(connect && _gameState != 2){
+					changeGameState(2);
+				}
+				else if(!connect && _gameState != 1){
+					changeGameState(1);
+				}
+
 				break;
 
 		} //End Switch

@@ -20,6 +20,8 @@ Render::Render(float width, float height): _height(height), _width(width), _wind
 		}
 
 	}
+	_setupButtonsConnect = _setupButtons;
+//	_setupButtonsConnect.push_back(Button( (width/2.0 - 50), height - 150, (width/2.0 + 50), height-100, 100, "Connect"));
 
 
 }
@@ -77,6 +79,7 @@ void Render::render(int state){
 			_currentButtons = &_menuButtons;
 			drawButtons();
 			break;
+
 		case 1: // setup
 			_window.clear(sf::Color(128, 128, 128));
 			_currentButtons = &_setupButtons;
@@ -84,6 +87,15 @@ void Render::render(int state){
 			drawRect(1000, 100, 1500, 100 + 100 * (_dockedCount + _dockOffset + (int) (_selectedShip != nullptr) ), sf::Color(160, 160, 160));
 			drawShips(); 
 			break;
+
+		case 2: // setup
+			_window.clear(sf::Color(128, 128, 128));
+			_currentButtons = &_setupButtonsConnect;
+			drawButtons();
+			drawRect(1000, 100, 1500, 100 + 100 * (_dockedCount + _dockOffset + (int) (_selectedShip != nullptr) ), sf::Color(160, 160, 160));
+			drawShips(); 
+			break;
+
 		default:
 			break;
 
