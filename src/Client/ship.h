@@ -32,7 +32,7 @@ public:
 	inline void clearButtons(){_buttons.clear();}
 	const std::vector<Button *> & getButtons(){return _buttons;}
 	bool isFloating(){return _floating;}
-	bool setFloating(bool f){_floating = f;}
+	void setFloating(bool f){_floating = f;}
 
 
 private:
