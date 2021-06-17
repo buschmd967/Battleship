@@ -15,12 +15,13 @@ public:
 	Ship(int x, int y, int size): _x(x), _y(y), _size(size), _isVertical(false), _sunk(false), _xOrig(x), _yOrig(y), _docked(true), _floating(false){}
 
 	inline bool sunk(){return _sunk;}
-	inline bool isVertical(){return _isVertical;}
+	inline bool isVertical() const {return _isVertical;}
 	inline void rotate(){_isVertical = !_isVertical;}
-	inline int x(){return _x;}
-	inline int y(){return _y;}
-	inline int size(){return _size;}
-	inline int docked() {return _docked;}
+	inline int x() const {return _x;}
+	inline int y() const {return _y;}
+
+	inline int size() const {return _size;}
+	inline int docked() const {return _docked;}
 	inline void docked(bool b){_docked = b;}
 	inline sf::Color color(){return _color;}
 	inline void setColor(sf::Color c){_color = c;}
@@ -35,8 +36,8 @@ public:
 
 
 private:
-	bool _docked;
-	bool _floating;
+	bool _docked; //Currently somewhere in the side pannel
+	bool _floating; //Either being moved or is in an invalid spot
 
 	int _size;
 	bool _isVertical;

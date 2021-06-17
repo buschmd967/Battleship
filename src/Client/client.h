@@ -14,9 +14,12 @@ public:
 
 private:
 
+	//Editing Phase
 	void handleShipEdit();
+	void handleShipRotate();
+	bool allShipsPlaced();
 	bool shipPlacementAvailable(int startIndex, int stopIndex, bool isVertical);
-
+	void selectShip();
 
 	bool _changeGameState = true; // need to update game state
 	int _gameState = 0;

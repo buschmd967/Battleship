@@ -39,6 +39,7 @@ public:
 	inline std::vector<Button> * getCurrentButtons(){return _currentButtons;}
 
 private:
+	void drawShip(const Ship & s, const sf::Color & outlineColor);
 	void drawButtons();
 	sf::Event _event;
 
