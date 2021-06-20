@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/title.dir/title.c.o CMakeFiles/title.dir/__/deps/glad_gl.c.o  -o title  -Wl,-rpath,/home/morgan/Documents/Battleship/Battleship/libraries-LIN64/glfw-master/src ../src/libglfw.so.3.4 -lm 

@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/triangle-opengl.dir/triangle-opengl.c.o CMakeFiles/triangle-opengl.dir/__/deps/glad_gl.c.o  -o triangle-opengl  -Wl,-rpath,/home/morgan/Documents/Battleship/Battleship/libraries-LIN64/glfw-master/src ../src/libglfw.so.3.4 -lm 

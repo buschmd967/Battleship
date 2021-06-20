@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/gears.dir/gears.c.o CMakeFiles/gears.dir/__/deps/glad_gl.c.o  -o gears  -Wl,-rpath,/home/morgan/Documents/Battleship/Battleship/libraries-LIN64/glfw-master/src ../src/libglfw.so.3.4 -lm 

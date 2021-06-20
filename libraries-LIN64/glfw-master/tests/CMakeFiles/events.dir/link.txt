@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/events.dir/events.c.o CMakeFiles/events.dir/__/deps/getopt.c.o CMakeFiles/events.dir/__/deps/glad_gl.c.o  -o events  -Wl,-rpath,/home/morgan/Documents/Battleship/Battleship/libraries-LIN64/glfw-master/src ../src/libglfw.so.3.4 -lm 

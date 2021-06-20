@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/glfwinfo.dir/glfwinfo.c.o CMakeFiles/glfwinfo.dir/__/deps/getopt.c.o CMakeFiles/glfwinfo.dir/__/deps/glad_gl.c.o CMakeFiles/glfwinfo.dir/__/deps/glad_vulkan.c.o  -o glfwinfo  -Wl,-rpath,/home/morgan/Documents/Battleship/Battleship/libraries-LIN64/glfw-master/src ../src/libglfw.so.3.4 -lm 

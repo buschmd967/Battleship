@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/empty.dir/empty.c.o CMakeFiles/empty.dir/__/deps/tinycthread.c.o CMakeFiles/empty.dir/__/deps/glad_gl.c.o  -o empty  -Wl,-rpath,/home/morgan/Documents/Battleship/Battleship/libraries-LIN64/glfw-master/src ../src/libglfw.so.3.4 -lm /usr/lib/x86_64-linux-gnu/librt.so -lpthread 

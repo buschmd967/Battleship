@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/offscreen.dir/offscreen.c.o CMakeFiles/offscreen.dir/__/deps/glad_gl.c.o  -o offscreen  -Wl,-rpath,/home/morgan/Documents/Battleship/Battleship/libraries-LIN64/glfw-master/src ../src/libglfw.so.3.4 -lm 

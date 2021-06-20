@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/joysticks.dir/joysticks.c.o CMakeFiles/joysticks.dir/__/deps/glad_gl.c.o  -o joysticks  -Wl,-rpath,/home/morgan/Documents/Battleship/Battleship/libraries-LIN64/glfw-master/src ../src/libglfw.so.3.4 -lm 
