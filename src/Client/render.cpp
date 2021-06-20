@@ -21,7 +21,7 @@ Render::Render(float width, float height): _height(height), _width(width), _wind
 
 	}
 	_setupButtonsConnect = _setupButtons;
-//	_setupButtonsConnect.push_back(Button( (width/2.0 - 50), height - 150, (width/2.0 + 50), height-100, 100, "Connect"));
+	_setupButtonsConnect.push_back(Button( (width/3.0  * 2.0 + 50), height - 150, 200, 50, 100, sf::Color::Black, ( (std::string) "Connect").c_str(), sf::Color::White ));
 
 
 }
@@ -174,6 +174,22 @@ void Render::drawButtons(){
 	}
 }
 
+void Render::drawShip(const Ship & s, const sf::Color & outlineColor){
+
+	int x = s.x();
+	int y = s.y();
+	
+	if(s.isVertical()){ //Vertical Ship
+		drawRect(x, y, x + (_blockWidth), y + (_blockHeight+1) * s.size() - 1, outlineColor);
+		drawRect(x + SHIP_HIGHLIGHT_WIDTH, y + SHIP_HIGHLIGHT_WIDTH, x + _blockWidth - SHIP_HIGHLIGHT_WIDTH, y + (_blockHeight+1) * s.size() - 1 - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
+	}
+	else{ //Horizontal Ship
+		drawRect(x, y, x + (_blockWidth+1) * s.size()-1, y + _blockHeight, outlineColor);
+			drawRect(x + SHIP_HIGHLIGHT_WIDTH, y + SHIP_HIGHLIGHT_WIDTH, x + (_blockWidth+1) * s.size() - 1 - SHIP_HIGHLIGHT_WIDTH, y + _blockHeight - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
+	}
+
+}
+
 void Render::drawShips(){
 	
 	//dock starting values
@@ -185,71 +201,35 @@ void Render::drawShips(){
 	int offset = 0;
 
 	//used to draw undocked ships
-	int x;
-	int y;
-
 	std::vector<int> floatingShipIndexes;
 	int selectedShipIndex = -1;
 
 	for(int i = 0; i < size; i++){
-		/*
-		std::cout << "size : " << size << std::endl;
-		std::cout << "offset: " << offset << std::endl;
-		std::cout << "i: " << i << std::endl;
-		*/
 		
+		//if ship is floating, draw later to draw above placed ships
 		if(_ships[i]->isFloating()){
-			//std::cout << "Skipping selected ship of size " << _ships[i]->size() << std::endl;
 			if(_ships[i] != _selectedShip){
 				floatingShipIndexes.push_back(i);
 			}
 			else{	//Save for later so current selected ship is displayed above all others
 				selectedShipIndex = i;
 			}
-			
 			continue;
 		}
 
 		Ship s = *(_ships[i]);
 		if(s.docked()){		//Docked Ships
 			_ships[i]->setPos(startWidth, startHeight + 100 * (i - offset));
-			/*
-			for(int block = 0; block < s.size(); block++){
-				
-
-				drawRect(startWidth + block * _blockWidth, (startHeight + 100 * (i - offset)), startWidth + (block + 1) * _blockWidth - 1, (startHeight + 100 * (i - offset)) + _blockHeight, sf::Color::Black); 
-			}	*/
+			
+			//This could be done with drawShip(), but since we know it's not rotated, it's faster not to check in that function
 			drawRect(startWidth, startHeight + 100 * (i - offset), startWidth + ((_blockWidth+2) * s.size()), startHeight+ + 100 * (i - offset) + (_blockHeight+2), sf::Color::Blue);
 			drawRect(startWidth + SHIP_HIGHLIGHT_WIDTH, startHeight + 100 * (i - offset) + SHIP_HIGHLIGHT_WIDTH, startWidth + ((_blockWidth+2) * s.size()) - SHIP_HIGHLIGHT_WIDTH, startHeight + 100 * (i - offset) + (_blockHeight+2) - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
 		}
 		else{				//Undocked Ships
 			//Fix problems for docked ships
 			offset++;
-
-			x = s.x();
-			y = s.y();
-			//draw undocked ship
-			if(s.isVertical()){ //Vertical Ship
-				for(int block = 0; block < s.size(); block++){
-					//drawRect(x, y + block + block * _blockHeight, x + _blockHeight - 1, y + block + (block + 1) * _blockHeight - 1, s.color());
-					//drawRect(x, y, x + (_blockWidth), y + (_blockHeight) * s.size(), sf::Color::Blue);
-					drawRect(x, y, x + (_blockWidth), y + (_blockHeight+1) * s.size() - 1, sf::Color::Blue);
-					drawRect(x + SHIP_HIGHLIGHT_WIDTH, y + SHIP_HIGHLIGHT_WIDTH, x + _blockWidth - SHIP_HIGHLIGHT_WIDTH, y + (_blockHeight+1) * s.size() - 1 - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
-
-				}
-
-			}
-			else{ 				//Horizontal Ship
-				for(int block = 0; block < s.size(); block++){
-					//drawRect(x + block + block * _blockWidth, y, x + block + (block + 1) * _blockWidth - 1, y + _blockHeight - 1, s.color());
-					drawRect(x, y, x + (_blockWidth+1) * s.size()-1, y + _blockHeight, sf::Color::Blue);
-					drawRect(x + SHIP_HIGHLIGHT_WIDTH, y + SHIP_HIGHLIGHT_WIDTH, x + (_blockWidth+1) * s.size() - 1 - SHIP_HIGHLIGHT_WIDTH, y + _blockHeight - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
-
-				}
-			}
-			
+			drawShip(s, sf::Color::Blue);
 		}
-
 	}
 
 	if(selectedShipIndex != -1){
@@ -257,24 +237,9 @@ void Render::drawShips(){
 	}
 	//Draw currently selected ship over all other ships (draw last)
 	for(int index : floatingShipIndexes){
-
+		
 		Ship s = * _ships[index];
-		x = s.x();
-		y = s.y();
-		if(s.isVertical()){ //Vertical Ship
-			for(int block = 0; block < s.size(); block++){
-				drawRect(x, y, x + _blockWidth, y + _blockHeight * s.size(), sf::Color::Red);
-				drawRect(x + SHIP_HIGHLIGHT_WIDTH, y + SHIP_HIGHLIGHT_WIDTH, x + _blockWidth - SHIP_HIGHLIGHT_WIDTH, y + _blockHeight * s.size() - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
-			}
-
-		}
-		else{ 				//Horizontal Ship
-			//std::cout << "drawing ship of size " << s.size() << std::endl;
-			for(int block = 0; block < s.size(); block++){
-				drawRect(x, y, x + _blockWidth * s.size(), y + _blockHeight, sf::Color::Red);
-				drawRect(x + SHIP_HIGHLIGHT_WIDTH, y + SHIP_HIGHLIGHT_WIDTH, x + _blockWidth * s.size() - SHIP_HIGHLIGHT_WIDTH, y + _blockHeight - SHIP_HIGHLIGHT_WIDTH, sf::Color::Black);
-			}
-		}
+		drawShip(s, sf::Color::Red);
 	}
 		
 }

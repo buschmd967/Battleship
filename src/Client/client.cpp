@@ -44,6 +44,8 @@ bool Client::shipPlacementAvailable(int startIndex, int stopIndex, bool isVertic
 
 }
 
+//Ship is deselected, try to place it in the grid
+//If ship is not in the grid, dock it
 void Client::handleShipEdit(){
 	//int x = _ships[_currentShip].x();
 	//int y = _ships[_currentShip].y();
@@ -113,10 +115,69 @@ void Client::updateGameState(){
 			break;
 		case 2: //Setup + connect
 			std::cout << "setup + connect" << std::endl;
+			break;
 		default:
 			std::cout << "Error changing gamestates: GameState '" << _gameState << "' not recognized" << std::endl;
 	}
 	
+}
+
+void Client::handleShipRotate(){
+	if( (sf::Keyboard::isKeyPressed(sf::Keyboard::R) || sf::Mouse::isButtonPressed(sf::Mouse::Right))  && !_rPressHandled){
+		std::cout << "Handling R press" << std::endl;
+		if(_currentShip != -1){
+			_ships[_currentShip].rotate();
+
+			std::swap(_mouseXOffset, _mouseYOffset);
+
+		}
+		_rPressHandled = true;
+	}
+	else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::R) && !sf::Mouse::isButtonPressed(sf::Mouse::Right)){
+		//std::cout << "resetting _rPressHandled" << std::endl;
+		_rPressHandled = false;
+	}
+
+}
+
+void Client::selectShip(){
+
+	_ships[_currentShip].setFloating(true);
+	Ship s = _ships[_currentShip];
+	std::vector<Button *> shipButtons = _ships[_currentShip].getButtons();
+	std::cout << "size: " << shipButtons.size() << std::endl;
+	if(shipButtons.size() > 0){
+		std::cout << "button id: " << (_ships[_currentShip].getButtons()[0])->id() << std::endl;
+	}
+	
+	for(int i = 0; i < shipButtons.size(); i++){
+		
+		int id = shipButtons[i]->id();
+		std::cout << "id: " << id << std::endl;
+		_shipGrid[id] = nullptr;
+	}
+	_ships[_currentShip].clearButtons();
+
+	_r.undock(_currentShip);
+	_ships[_currentShip].setColor(sf::Color(100, 100, 100));
+	_r.setSelectedShip(_ships[_currentShip]);
+
+	_mouseXOffset = s.x() - _r.mouseX();
+	_mouseYOffset = s.y() - _r.mouseY();
+	//std::cout << "Set offset to: ( " << _mouseXOffset << ", " << _mouseYOffset << ")" << std::endl;
+	//std::cout << "undocked ship " << _currentShip << std::endl;;
+
+}
+
+bool Client::allShipsPlaced(){
+
+	for(Ship s : _ships){
+		if(s.docked() || s.isFloating()){
+			return false;
+		}
+	}
+
+	return true;
 }
 
 void Client::run(){
@@ -147,64 +208,17 @@ void Client::run(){
 				break;
 			case 1: // Setup
 			case 2: //Setup + connect
-				if( (sf::Keyboard::isKeyPressed(sf::Keyboard::R) || sf::Mouse::isButtonPressed(sf::Mouse::Right))  && !_rPressHandled){
-					std::cout << "Handling R press" << std::endl;
-					if(_currentShip != -1){
-						_ships[_currentShip].rotate();
 
-						std::swap(_mouseXOffset, _mouseYOffset);
-						//Logic: if x and y have same signs, flip x
-						//if x and y have different signs, flip y
-						/*
-						if(_mouseXOffset * _mouseYOffset > 0){ //same signs
-							//_mouseXOffset *= -1;
-							std::swap(_mouseXOffset, _mouseYOffset);
-							
-						}
-						else{
-							//_mouseYOffset *= -1;
-							std::swap(_mouseXOffset, _mouseYOffset);
-						}*/
-
-					}
-					_rPressHandled = true;
-				}
-				else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::R) && !sf::Mouse::isButtonPressed(sf::Mouse::Right)){
-					//std::cout << "resetting _rPressHandled" << std::endl;
-					_rPressHandled = false;
-				}
-
-
+				handleShipRotate();
+				
 				if(_r.mouseClicked()){
 					_r.setMouseClicked(false);
 					int pressedButton = _r.getButtonClicked();
+					std::cout << pressedButton << std::endl;
 					_currentShip = _r.getShipClicked();
 					//std::cout << "Ship Pressed: " << _currentShip << std::endl;;
 					if(_currentShip != -1){
-						_ships[_currentShip].setFloating(true);
-						Ship s = _ships[_currentShip];
-						std::vector<Button *> shipButtons = _ships[_currentShip].getButtons();
-						std::cout << "size: " << shipButtons.size() << std::endl;
-						if(shipButtons.size() > 0){
-							std::cout << "button id: " << (_ships[_currentShip].getButtons()[0])->id() << std::endl;
-						}
-						
-						for(int i = 0; i < shipButtons.size(); i++){
-							
-							int id = shipButtons[i]->id();
-							std::cout << "id: " << id << std::endl;
-							_shipGrid[id] = nullptr;
-						}
-						_ships[_currentShip].clearButtons();
-
-						_r.undock(_currentShip);
-						_ships[_currentShip].setColor(sf::Color(100, 100, 100));
-						_r.setSelectedShip(_ships[_currentShip]);
-
-						_mouseXOffset = s.x() - _r.mouseX();
-						_mouseYOffset = s.y() - _r.mouseY();
-						//std::cout << "Set offset to: ( " << _mouseXOffset << ", " << _mouseYOffset << ")" << std::endl;
-						//std::cout << "undocked ship " << _currentShip << std::endl;;
+						selectShip();
 					}
 					else{
 						_r.clearSelectedShip();
@@ -223,13 +237,15 @@ void Client::run(){
 							*/
 					//std::cout << "Button Pressed: " << pressedButton << std::endl;
 				}
+
+				//Moving ship while holding mouse down
 				if(_r.mouseDown()){
 					if(_currentShip != -1){
 						_ships[_currentShip].setPos(_r.mouseX() + _mouseXOffset , _r.mouseY() + _mouseYOffset);
 						//std::cout << "moved ship " << _currentShip << " to (" << _r.mouseX() << ", " << _r.mouseY() << ")" << std::endl;
 					}
-//90, 800
 				}
+				//Mouse Up, deselect ship
 				else{
 					if(_currentShip != -1){
 						handleShipEdit();
@@ -237,19 +253,14 @@ void Client::run(){
 					
 				}
 
-				bool connect = true;
+				//If all ships are placed, swap gamestate to 2 to show connect option
+				//If ships are being edited after that, swap game state back to 1
+				bool readyToConnect = allShipsPlaced();
 
-				for(Ship s : _ships){
-					if(s.docked() || s.isFloating()){
-						connect = false;
-						break;
-					}
-				}
-
-				if(connect && _gameState != 2){
+				if(readyToConnect && _gameState != 2){
 					changeGameState(2);
 				}
-				else if(!connect && _gameState != 1){
+				else if(!readyToConnect && _gameState != 1){
 					changeGameState(1);
 				}
 
