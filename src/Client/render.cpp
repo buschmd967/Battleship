@@ -21,7 +21,7 @@ Render::Render(float width, float height): _height(height), _width(width), _wind
 
 	}
 	_setupButtonsConnect = _setupButtons;
-//	_setupButtonsConnect.push_back(Button( (width/2.0 - 50), height - 150, (width/2.0 + 50), height-100, 100, "Connect"));
+	_setupButtonsConnect.push_back(Button( (width/3.0  * 2.0 + 50), height - 150, 200, 50, 100, sf::Color::Black, ( (std::string) "Connect").c_str(), sf::Color::White ));
 
 
 }

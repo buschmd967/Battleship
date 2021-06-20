@@ -115,6 +115,7 @@ void Client::updateGameState(){
 			break;
 		case 2: //Setup + connect
 			std::cout << "setup + connect" << std::endl;
+			break;
 		default:
 			std::cout << "Error changing gamestates: GameState '" << _gameState << "' not recognized" << std::endl;
 	}
@@ -213,6 +214,7 @@ void Client::run(){
 				if(_r.mouseClicked()){
 					_r.setMouseClicked(false);
 					int pressedButton = _r.getButtonClicked();
+					std::cout << pressedButton << std::endl;
 					_currentShip = _r.getShipClicked();
 					//std::cout << "Ship Pressed: " << _currentShip << std::endl;;
 					if(_currentShip != -1){
